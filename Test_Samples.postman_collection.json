@@ -1,0 +1,217 @@
+{
+	"info": {
+		"_postman_id": "f553289d-045d-49f3-a86b-65d009c095d7",
+		"name": "Test_Samples",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2725189"
+	},
+	"item": [
+		{
+			"name": "Task3",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var posts=pm.iterationData.get(\"postcode\");\r",
+							"pm.collectionVariables.set(\"postcode_array\", JSON.parse(posts));\r",
+							"pm.collectionVariables.set(\"noofcities\", data['noofcities']);\r",
+							"\r",
+							"\r",
+							"postman.setNextRequest(\"Task4\");\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var citieslist=[];\r",
+							"pm.test(\"Asserting the cities result is an array\", () => {\r",
+							"pm.expect((pm.response.json).length).that.be.greaterThan(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validating multiple cities are returned for the appropraite data\", () => \r",
+							"{\r",
+							"    \r",
+							"      let jsonres = pm.response.json();\r",
+							"       var list = (jsonres.Cities).length;\r",
+							"\r",
+							"// add a new variable no of cities in inpout json and valdiate against the length\r",
+							"pm.expect(list).to.equal((pm.collectionVariables.get(\"noofcities\")));\r",
+							"\r",
+							"for (var i = 0; i < list; i++) \r",
+							"{\r",
+							"    citieslist.push(jsonres.Cities[i]);\r",
+							";\r",
+							"}\r",
+							" \r",
+							" pm.environment.set(\"cities_list2\", JSON.stringify(citieslist));\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://service.verivox.de/geo/latestv2/cities/{{postcode_array}}",
+					"protocol": "https",
+					"host": [
+						"service",
+						"verivox",
+						"de"
+					],
+					"path": [
+						"geo",
+						"latestv2",
+						"cities",
+						"{{postcode_array}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Task4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var deutschChars=[\"ß\",\"µ\",\"Ö\",\"Ä\",\"-\",\"-\",\".\",\"ä\"];\r",
+							"pm.environment.set(\"specialchars\",JSON.stringify(deutschChars));\r",
+							"pm.test(\"Asserting the street result is an array\", () => {\r",
+							"pm.expect((pm.response.json).length).that.be.greaterThan(1);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validating streets with special characters\", () => \r",
+							"{\r",
+							"    \r",
+							"     let jsonres = pm.response.json();\r",
+							"     var list = (jsonres.Streets).length;\r",
+							"    var count=0;\r",
+							"    for (var i = 0; i < list; i++) \r",
+							"{\r",
+							"   var streetlists=jsonres.Streets[i];\r",
+							"   count=0; \r",
+							"  deutschChars.forEach(entry=> \r",
+							"  {\r",
+							"            \r",
+							"        if(streetlists.includes(entry))\r",
+							"        {\r",
+							"           \r",
+							"            console.log(\"These has special characters inside\"+streetlists+\"Special Character is\"+entry);\r",
+							"            count=count+1;\r",
+							"             return true;\r",
+							"        }\r",
+							"       return true;\r",
+							"     \r",
+							"    });\r",
+							"   \r",
+							"\r",
+							"   \r",
+							"   \r",
+							"  }\r",
+							" \r",
+							" \r",
+							" \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"var names = JSON.parse(pm.environment.get(\"cities_list2\"));\r",
+							"//console.log(names);\r",
+							"\r",
+							"\r",
+							"\r",
+							"_.forEach(names, (name) => \r",
+							"{\r",
+							"    pm.sendRequest\r",
+							"    ({\r",
+							"        url: 'https://service.verivox.de/geo/latestv2/cities/'+pm.collectionVariables.get(\"postcode_array\")+ '/'+name+'/streets/',\r",
+							"        method: 'GET'\r",
+							"     } , \r",
+							"      function (err, res) {\r",
+							"      console.log(\"res=\", res);\r",
+							"      }\r",
+							"  );\r",
+							"}\r",
+							") "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://service.verivox.de/geo/latestv2/cities/10409/Berlin/streets/",
+					"protocol": "https",
+					"host": [
+						"service",
+						"verivox",
+						"de"
+					],
+					"path": [
+						"geo",
+						"latestv2",
+						"cities",
+						"10409",
+						"Berlin",
+						"streets",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "postcode",
+			"value": "77716"
+		},
+		{
+			"key": "postcode_array",
+			"value": ""
+		},
+		{
+			"key": "noofcities",
+			"value": ""
+		},
+		{
+			"key": "places",
+			"value": "Berlin"
+		},
+		{
+			"key": "cities_list2",
+			"value": ""
+		}
+	]
+}
