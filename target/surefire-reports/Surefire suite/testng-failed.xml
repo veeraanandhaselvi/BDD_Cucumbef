@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite thread-count="1" data-provider-thread-count="3" name="Failed suite [Surefire suite]" verbose="0">
+  <test thread-count="1" name="Surefire test(failed)" verbose="0">
+    <classes>
+      <class name="tests.Test_Story1_VerifyDSLCalculator">
+        <methods>
+          <include name="driverClose"/>
+          <include name="setUp"/>
+          <include name="task1_validateServicesMenuSelection"/>
+        </methods>
+      </class> <!-- tests.Test_Story1_VerifyDSLCalculator -->
+    </classes>
+  </test> <!-- Surefire test(failed) -->
+</suite> <!-- Failed suite [Surefire suite] -->

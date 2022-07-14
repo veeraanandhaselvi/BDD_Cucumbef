@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: tests.Test_Story1_VerifyDSLCalculator
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 1, Errors: 0, Skipped: 2, Time elapsed: 5.215 s <<< FAILURE! - in tests.Test_Story1_VerifyDSLCalculator
+tests.Test_Story1_VerifyDSLCalculator.setUp  Time elapsed: 4.789 s  <<< FAILURE!
+java.lang.NullPointerException: Cannot invoke "domainobjects.Cookies.setCookies(io.restassured.http.Cookies)" because "this.cookies" is null
+	at tests.Test_Story1_VerifyDSLCalculator.setUp(Test_Story1_VerifyDSLCalculator.java:30)
+
